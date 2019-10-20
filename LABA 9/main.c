@@ -5,7 +5,7 @@
 # define NO 0
 # define MAXLINE 1024
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	// указатели на структуру типа FILE для входной и выходного файлов
 	FILE *fpin;
@@ -13,7 +13,6 @@ int main(void)
 
 	char line[MAXLINE]; // текущая строка
 	char result[MAXLINE]; // результирующая строка
-	char c; // текущий символ
 	int word = NO; // признак слова
 	int symb = NO; // индикатор наличия лишних символов
 	int chetnoe = NO; // признак, что в слове четное кол-во букв
@@ -23,9 +22,19 @@ int main(void)
 	char *word_ptr = line; // указатель на начало слова
 	char *output_ptr = result; // указатель на результирующий масcив
 
+	if (argc == 2)
+	{
+		argv[2] = "C:\\Users\\HP\\source\\repos\\Project9\\Project9\\result.txt";
+	}
+	else if (argc == 1)
+	{
+		argv[1] = "C:\\Users\\HP\\source\\repos\\Project9\\Project9\\file.txt";
+		argv[2] = "C:\\Users\\HP\\source\\repos\\Project9\\Project9\\result.txt";
+	}
+
 
 	// открыть файл для чтения
-	fpin = fopen("file.txt", "rt");
+	fpin = fopen(argv[1], "rt");
 	if (fpin == NULL)
 	{
 		printf("error1");
@@ -33,7 +42,7 @@ int main(void)
 	}
 	 
     // открыть файл для записи
-	fpout = fopen("result.txt", "wt");
+	fpout = fopen(argv[2], "wt");
 	if (fpout == NULL)
 	{
 		printf("error2");
@@ -52,8 +61,8 @@ int main(void)
 
 		do
 		{
-			c = *in_ptr; // берем текущий символ
-			if (c == ' ' || c == '.' || c == ',' || c == '\n' || c == '\0' || c == '\t') // если текущий символ разделитель,
+			//c = *in_ptr; // берем текущий символ
+			if (*in_ptr == ' ' || *in_ptr == '.' || *in_ptr == ',' || *in_ptr == '\n' || *in_ptr == '\0' || *in_ptr == '\t') // если текущий символ разделитель,
 			{
 				if (word == YES && cnt % 2 != 0 || symb == YES) // если проходит по 1/2 условию,
 				{
@@ -69,7 +78,7 @@ int main(void)
 				
 				if (*in_ptr != '\0')
 				{
-					*out_ptr++ = c; // вставляем текущий разделитель
+					*out_ptr++ = *in_ptr; // вставляем текущий разделитель
 				}
 
 				symb = NO;
@@ -79,7 +88,7 @@ int main(void)
 			else
 			{
 				cnt++;
-				if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z')) // проверить не является ли этот символ лишним
+				if ((*in_ptr < 'a' || *in_ptr > 'z') && (*in_ptr < 'A' || *in_ptr > 'Z')) // проверить не является ли этот символ лишним
 				{
 					symb = YES; // в слове есть лишний символ
 				}
@@ -90,8 +99,7 @@ int main(void)
 				}
 				word = YES;
 			}
-			in_ptr++;
-		} while (c != '\0'); // продолжаем до конца строки
+		} while (*in_ptr++ != '\0'); // продолжаем до конца строки
 	}
 
 	while (output_ptr != out_ptr)
