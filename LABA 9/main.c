@@ -61,7 +61,6 @@ int main(int argc, char *argv[])
 
 		do
 		{
-			//c = *in_ptr; // берем текущий символ
 			if (*in_ptr == ' ' || *in_ptr == '.' || *in_ptr == ',' || *in_ptr == '\n' || *in_ptr == '\0' || *in_ptr == '\t') // если текущий символ разделитель,
 			{
 				if (word == YES && cnt % 2 != 0 || symb == YES) // если проходит по 1/2 условию,
