@@ -62,7 +62,7 @@ int menu(void)
 	system("cls");
 	int m;
 	printf("Select menu item:\n");
-	printf("1-\n"); // новая команда
+	printf("1-New team\n"); // новая команда
 	printf("2-\n"); // игра
 	printf("3-\n"); // полная таблица
 	printf("4-\n"); // турнирная таблица
@@ -153,7 +153,7 @@ void game(void)
 		team[player2].game += 1;
 		team[player2].victory += 1;
 		team[player2].points += 3;
-		
+
 		team[player1].game += 1;
 		team[player1].defeat += 1;
 	}
@@ -206,7 +206,7 @@ void turnir(void)
 
 void read(void)
 {
-	FILE* fpin = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "rt"); // открыть входной файл для чтения
+	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть входной файл для чтения
 
 	if (fpin == NULL)
 	{
@@ -262,7 +262,7 @@ void read(void)
 
 void save(void)
 {
-	FILE* fpout = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "wt"); // открыть файл для записи
+	FILE* fpout = fopen("C:\\Users\\HP\\source\\repos\\result.txt", "wt"); // открыть файл для записи
 
 	if (fpout == NULL)
 	{
