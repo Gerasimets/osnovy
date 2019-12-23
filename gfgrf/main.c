@@ -14,8 +14,8 @@ typedef struct
 	int tie; // всего ничей
 	int defeat; // всего поражений
 	int points; // всего очков
-	int goal; //всего голов
-	int play; //играла команда или нет 
+	int goal; // всего голов
+	int play;
 	int mas[N];
 }liga;
 
@@ -23,13 +23,14 @@ liga team[N];
 int number = 0;
 int num;
 
-int menu(void); 
+int menu(void);
 void new_team(void);
 void game(void);
 void full(void);
 void turnir(void);
 void read(void);
 void save(void);
+int factorial(int);
 
 int main()
 {
@@ -63,10 +64,10 @@ int menu(void)
 	system("cls");
 	int m;
 	printf("Select menu item:\n");
-	printf("1-New team\n"); // новая команда
-	printf("2-New game\n"); // игра
-	printf("3-Full table\n"); // полная таблица
-	printf("4-Tournament table\n"); // турнирная таблица
+	printf("1-\n"); // новая команда
+	printf("2-\n"); // игра
+	printf("3-\n"); // полная таблица
+	printf("4-\n"); // турнирная таблица
 	printf("5-\n");
 	printf("6-Exit the program\n");
 	scanf("%d", &m);
@@ -76,8 +77,6 @@ int menu(void)
 
 void new_team(void)
 {
-	/*int all[N];*/
-
 	printf("Enter name > ");
 	scanf("%s", team[number].title);
 
@@ -88,7 +87,7 @@ void new_team(void)
 	team[number].points = 0;
 	team[number].play = 0;
 	team[number].goal = 0;
-	team[number].mas[0] = number;
+	//team[number].mas[0] = number;
 
 	number++;
 
@@ -99,8 +98,9 @@ void new_team(void)
 
 void game(void)
 {
-	int flag = NO;
-	int found = NO;
+	int found_new_players = NO;
+	int unplayed = NO;
+	int finish_found = NO;
 
 	int player1;
 	int player2;
@@ -108,48 +108,68 @@ void game(void)
 	int gol1 = 0;
 	int gol2 = 0;
 
-	int i, j;
+	int i, j, r;
 
 	srand(time(NULL));
 
+	int pot = factorial(number) / (factorial(number - 2) * 2);
+
 	for (num = 0; num < number; num++)
 	{
-		if (team[num].play != number - 1)
+		if (team[num].play != number-1)
 		{
-			found = YES;
+			unplayed = YES;
 		}
-
 	}
 
-	if (found == YES)
+	if (unplayed == YES)
 	{
-		while (flag != YES)
+		while (found_new_players != YES)
 		{
-			player1 = 0 + rand() % number;
-			player2 = 0 + rand() % number;
+			found_new_players = YES;
 
-			flag = YES;
-
-			for (i = 0; i <= team[player1].play/*+1*/ && flag == YES; i++) //и тут плюс 1
+			while (finish_found != YES)
 			{
-				for (j = 0; j <= team[player2].play/*+1*/ && flag == YES; j++) //вот тут +1
+				player1 = 0 + rand() % number;
+				player2 = 0 + rand() % number;
+
+				if (player1 != player2)
 				{
-					if (team[player1].mas[i] == team[player2].mas[j])
-					{
-						flag = NO;
-					}
+					finish_found = YES;
+				}
+			}
+
+			if (team[player1].play == 0)
+			{
+				for (r = 0; r < number - 1; r++)
+				{
+					team[player1].mas[r] = -1;
+				}
+			}
+
+			if (team[player2].play == 0)
+			{
+				for (r = 0; r < number - 1; r++)
+				{
+					team[player2].mas[r] = -1;
+				}
+			}
+
+			for (int i = 0; i < number - 1; i++)
+			{
+				if (team[player1].mas[i] == player2)
+				{
+					found_new_players = NO;
+					finish_found = NO;
 				}
 			}
 		}
 
-		if (flag == YES)
-		{
-			team[player1].play += 1;
-			team[player2].play += 1;
+		team[player1].mas[team[player1].play] = player2;
+		team[player2].mas[team[player2].play] = player1;
 
-			team[player1].mas[team[player1].play] = player2;
-			team[player2].mas[team[player2].play] = player1;
-		}
+		team[player1].play += 1;
+		team[player2].play += 1;
 
 		printf("%s VS %s\n", team[player1].title, team[player2].title);
 
@@ -159,41 +179,42 @@ void game(void)
 		team[player1].goal += gol1;
 		team[player2].goal += gol2;
 
-		if (gol1 > gol2) //если больше голов у первой команды
+		if (gol1 > gol2)
 		{
-			team[player1].game += 1; //плюс одна игра
-			team[player1].victory += 1; //плюс одна победа
-			team[player1].points += 3; //плюс три очка
+			team[player1].game += 1;
+			team[player1].victory += 1;
+			team[player1].points += 3;
 
-			team[player2].game += 1; //плюс одна игра
-			team[player2].defeat += 1; //плюс одно поражение
+			team[player2].game += 1;
+			team[player2].defeat += 1;
 		}
-		else if (gol1 < gol2) //если больше голов у второй команды
+		else if (gol1 < gol2)
 		{
-			team[player2].game += 1; //плюс одна игра
-			team[player2].victory += 1; //плюс одна победа
-			team[player2].points += 3; //плюс три очка
+			team[player2].game += 1;
+			team[player2].victory += 1;
+			team[player2].points += 3;
 
-			team[player1].game += 1; //плюс одна игра
-			team[player1].defeat += 1; //плюс одно поражение
+			team[player1].game += 1;
+			team[player1].defeat += 1;
 		}
-		else //иначе, если количество очков одинаковое
+		else
 		{
-			team[player1].game += 1; //плюс одна игра
-			team[player1].tie += 1; //одна ничья
-			team[player1].points += 1; //одно очко
+			team[player1].game += 1;
+			team[player1].tie += 1;
+			team[player1].points += 1;
 
-			team[player2].game += 1; //одна игра
-			team[player2].tie += 1; //одна ничья
-			team[player2].points += 1; //одно очко
+			team[player2].game += 1;
+			team[player2].tie += 1;
+			team[player2].points += 1;
 		}
 
 		save();
 	}
 	else
 	{
-		printf("The teams have already played\n"); //все команды уже сыграли
+		printf("error\n");
 	}
+
 	system("pause");
 }
 
@@ -201,8 +222,7 @@ void full(void)
 {
 	for (num = 0; num < number; num++)
 	{
-		printf("\t%s %s %s %s %s %s %s\n", "TEAM", "MATCHES", "VICTORIES", "DEFEATS", "TIE", "GOALS", "POINTS");
-		printf("\t%s \t%d \t%d \t%d \t%d    %d \t%d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points);
+		printf("%s %d %d %d %d %d %d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points);
 	}
 	system("pause");
 }
@@ -226,15 +246,14 @@ void turnir(void)
 
 	for (num = 0; num < number; num++)
 	{
-		printf("\t%s %s\n", "TEAM", "POINTS");
-		printf("\t%s %d\n", team[num].title, team[num].points);
+		printf("%s %d\n", team[num].title, team[num].points);
 	}
 	system("pause");
 }
 
 void read(void)
 {
-	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть входной файл для чтения
+	FILE* fpin = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "rt"); // открыть входной файл для чтения
 
 	if (fpin == NULL)
 	{
@@ -313,7 +332,7 @@ void read(void)
 
 void save(void)
 {
-	FILE* fpout = fopen("C:\\Users\\HP\\source\\file.txt", "wt"); // открыть файл для записи
+	FILE* fpout = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "wt"); // открыть файл для записи
 
 	if (fpout == NULL)
 	{
@@ -327,4 +346,13 @@ void save(void)
 	}
 
 	fclose(fpout); // закрыть выходной файл
+}
+
+int factorial(int n)
+{
+	if (n == 0 || n == 1)
+	{
+		return 1;
+	}
+	return n * factorial(n - 1);
 }
