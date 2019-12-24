@@ -82,20 +82,28 @@ int menu(void)
 
 void new_team(void)
 {
+	FILE* fpout = fopen("C:\\Users\\HP\\source\\file.txt", "a"); // открыть файл для записи
 	count();
 	team = (liga*)realloc(team, (++cnt) * sizeof(liga));
 
 	printf("Enter name > ");
 	scanf("%s", team[number].title);
+	fprintf(fpout, "%s ", team[number].title);
 
 	team[number].game = 0;
+	fprintf(fpout, "%d ", team[number].game);
 	team[number].victory = 0;
+	fprintf(fpout, "%d ", team[number].victory);
 	team[number].tie = 0;
+	fprintf(fpout, "%d ", team[number].tie);
 	team[number].defeat = 0;
+	fprintf(fpout, "%d ", team[number].defeat);
 	team[number].points = 0;
+	fprintf(fpout, "%d ", team[number].points);
 	team[number].play = 0;
+	fprintf(fpout, "%d ", team[number].play);
 	team[number].goal = 0;
-	//team[number].mas[0] = number;
+	fprintf(fpout, "%d ", team[number].goal);
 
 	number++;
 
