@@ -54,6 +54,9 @@ int main()
 		case 5:
 			read();
 			break;
+		default:
+			printf("Select menu item\n");
+			system("pause");
 		};
 	}
 	return 0;
@@ -64,11 +67,11 @@ int menu(void)
 	system("cls");
 	int m;
 	printf("Select menu item:\n");
-	printf("1-\n"); // новая команда
-	printf("2-\n"); // игра
-	printf("3-\n"); // полная таблица
-	printf("4-\n"); // турнирная таблица
-	printf("5-\n");
+	printf("1-New team\n"); // новая команда
+	printf("2-New game\n"); // игра
+	printf("3-Full table\n"); // полная таблица
+	printf("4-Tournament table\n"); // турнирная таблица
+	/*printf("5-\n");*/
 	printf("6-Exit the program\n");
 	scanf("%d", &m);
 	system("cls");
@@ -116,7 +119,7 @@ void game(void)
 
 	for (num = 0; num < number; num++)
 	{
-		if (team[num].play != number-1)
+		if (team[num].play != number - 1)
 		{
 			unplayed = YES;
 		}
@@ -212,7 +215,7 @@ void game(void)
 	}
 	else
 	{
-		printf("error\n");
+		printf("The teams have already played\n");
 	}
 
 	system("pause");
@@ -222,7 +225,8 @@ void full(void)
 {
 	for (num = 0; num < number; num++)
 	{
-		printf("%s %d %d %d %d %d %d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points);
+		printf("\t%s %s %s %s %s %s %s\n", "TEAM", "MATCHES", "VICTORIES", "DEFEATS", "TIE", "GOALS", "POINTS");
+		printf("\t%s \t%d \t%d \t%d \t%d    %d      %d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points);
 	}
 	system("pause");
 }
@@ -246,14 +250,15 @@ void turnir(void)
 
 	for (num = 0; num < number; num++)
 	{
-		printf("%s %d\n", team[num].title, team[num].points);
+		printf("\t%s %s\n", "TEAM", "POINTS");
+		printf("\t%s \t%d\n", team[num].title, team[num].points);
 	}
 	system("pause");
 }
 
 void read(void)
 {
-	FILE* fpin = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "rt"); // открыть входной файл для чтения
+	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть входной файл для чтения
 
 	if (fpin == NULL)
 	{
@@ -332,7 +337,7 @@ void read(void)
 
 void save(void)
 {
-	FILE* fpout = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "wt"); // открыть файл для записи
+	FILE* fpout = fopen("C:\\Users\\HP\\source\\file.txt", "wt"); // открыть файл для записи
 
 	if (fpout == NULL)
 	{
