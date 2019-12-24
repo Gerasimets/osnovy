@@ -82,12 +82,12 @@ int menu(void)
 
 void new_team(void)
 {
-	FILE* fpout = fopen("C:\\Users\\HP\\source\\file.txt", "a"); // открыть файл для записи
+	FILE* fpout = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "a"); // открыть файл для записи
 	count();
 	team = (liga*)realloc(team, (++cnt) * sizeof(liga));
 
 	printf("Enter name > ");
-	scanf("%s", team[number].title);
+	scanf("%s", &team[number].title);
 	fprintf(fpout, "%s ", team[number].title);
 
 	team[number].game = 0;
@@ -104,12 +104,12 @@ void new_team(void)
 	fprintf(fpout, "%d ", team[number].play);
 	team[number].goal = 0;
 	fprintf(fpout, "%d ", team[number].goal);
+	fprintf(fpout, "\n");
 
+	fclose(fpout); // закрыть выходной файл
 	number++;
 
 	system("pause");
-
-	save();
 }
 
 void game(void)
@@ -273,7 +273,7 @@ void read(void)
 {
 	count();
 	team = (liga*)malloc(cnt * sizeof(liga));
-	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть входной файл для чтения
+	FILE* fpin = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "rt"); // открыть входной файл для чтения
 
 	if (fpin == NULL)
 	{
@@ -297,6 +297,7 @@ void read(void)
 		{
 			team[number].title[j] = line[i];
 		}
+		team[number].title[j] = '\0';
 
 		mas = &line[++i];
 		team[number].game = atoi(mas);
@@ -341,18 +342,25 @@ void read(void)
 		mas = &line[++i];
 		team[number].points = atoi(mas);
 
+		for (i++; line[i] != ' '; i++)
+		{
+
+		}
+
+		mas = &line[++i];
+		team[number].play = atoi(mas);
+
 		number++;
 	}
 
 	fclose(fpin); // закрыть входной файл
 
-	save();
 	full();
 }
 
 void save(void)
 {
-	FILE* fpout = fopen("C:\\Users\\HP\\source\\file.txt", "wt"); // открыть файл для записи
+	FILE* fpout = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "wt"); // открыть файл для записи
 
 	if (fpout == NULL)
 	{
@@ -362,7 +370,7 @@ void save(void)
 
 	for (num = 0; num < number; num++)
 	{
-		fprintf(fpout, "%s %d %d %d %d %d %d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points);
+		fprintf(fpout, "%s %d %d %d %d %d %d %d\n", team[num].title, team[num].game, team[num].victory, team[num].defeat, team[num].tie, team[num].goal, team[num].points, team[num].play);
 	}
 
 	fclose(fpout); // закрыть выходной файл
@@ -380,7 +388,7 @@ int factorial(int n)
 void count(void)
 {
 	cnt = 0;
-	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть файл для записи
+	FILE* fpin = fopen("C:\\Users\\User\\source\\repos\\gerf.txt", "rt"); // открыть файл для записи
 
 	if (fpin == NULL)
 	{
