@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N 200
+#define N 100
 #define YES 1
 #define NO 0
 
@@ -19,9 +19,10 @@ typedef struct
 	int mas[N];
 }liga;
 
-liga team[N];
+liga* team;
 int number = 0;
 int num;
+int cnt;
 
 int menu(void);
 void new_team(void);
@@ -31,6 +32,7 @@ void turnir(void);
 void read(void);
 void save(void);
 int factorial(int);
+void count(void);
 
 int main()
 {
@@ -71,7 +73,7 @@ int menu(void)
 	printf("2-New game\n"); // игра
 	printf("3-Full table\n"); // полная таблица
 	printf("4-Tournament table\n"); // турнирная таблица
-	/*printf("5-\n");*/
+	printf("5-Load from file\n");
 	printf("6-Exit the program\n");
 	scanf("%d", &m);
 	system("cls");
@@ -80,6 +82,9 @@ int menu(void)
 
 void new_team(void)
 {
+	count();
+	team = (liga*)realloc(team, (++cnt) * sizeof(liga));
+
 	printf("Enter name > ");
 	scanf("%s", team[number].title);
 
@@ -258,6 +263,8 @@ void turnir(void)
 
 void read(void)
 {
+	count();
+	team = (liga*)malloc(cnt * sizeof(liga));
 	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть входной файл для чтения
 
 	if (fpin == NULL)
@@ -360,4 +367,38 @@ int factorial(int n)
 		return 1;
 	}
 	return n * factorial(n - 1);
+}
+
+void count(void)
+{
+	cnt = 0;
+	FILE* fpin = fopen("C:\\Users\\HP\\source\\file.txt", "rt"); // открыть файл для записи
+
+	if (fpin == NULL)
+	{
+		printf("error opening file input\n"); // информация об ошибке
+		return; // ошибка при открытии файла
+	}
+
+	while (!feof(fpin)) // цикл до конца файла
+	{
+		char line[N];
+		char* ptr = fgets(line, N, fpin); // чтение строки
+		int i = 0;
+
+		if (ptr == NULL)
+		{
+			break; // файл исчерпан
+		}
+
+		i = 0;
+
+		while (line[i] != '\n')
+		{
+			i++;
+		}
+		cnt++;
+	}
+
+	fclose(fpin); // закрыть входной файл
 }
